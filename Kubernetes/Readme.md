@@ -11,9 +11,7 @@ We’ll:
 - Configure Prometheus (outside cluster) to scrape cAdvisor metrics securely using that token
 
   # Step 1: Deploy cAdvisor as DaemonSet
-Here’s a working cadvisor.yaml: 
-
-  https://github.com/sharkhar/Docs/blob/main/Kubernetes/cadvisor.yaml
+Here’s a working [cadvisor.yaml](https://github.com/sharkhar/Docs/blob/main/Kubernetes/cadvisor.yaml):
   
 Apply it:
 ```
@@ -21,9 +19,7 @@ kubectl create namespace monitoring
 kubectl apply -f cadvisor.yaml
 ```
 # Step 2: Create ServiceAccount + Token Secret for Prometheus
-prometheus-remote-token.yaml
-
-  https://github.com/sharkhar/Docs/blob/main/Kubernetes/prometheus-remote-token.yaml
+[prometheus-remote-token.yaml](https://github.com/sharkhar/Docs/blob/main/Kubernetes/prometheus-remote-token.yaml):
   
 Apply it:
 ```
