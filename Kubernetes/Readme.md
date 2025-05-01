@@ -12,7 +12,7 @@ We’ll:
 
   # Step 1: Deploy cAdvisor as DaemonSet
 Here’s a working cadvisor.yaml: 
-
+  https://github.com/sharkhar/Docs/blob/main/Kubernetes/cadvisor.yaml
 Apply it:
 ```
 kubectl create namespace monitoring
