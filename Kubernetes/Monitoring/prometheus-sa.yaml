@@ -1,0 +1,30 @@
+piVersion: v1
+ kind: ServiceAccount
+ metadata:
+   name: prometheus-remote
+   namespace: kube-system
+ ---
+ apiVersion: rbac.authorization.k8s.io/v1
+ kind: ClusterRole
+ metadata:
+   name: prometheus-kubelet
+ rules:
+   - apiGroups: [""]
+     resources:
+       - nodes/proxy
+       - nodes/stats
+       - nodes/metrics
+     verbs: ["get", "list", "watch"]
+ ---
+ apiVersion: rbac.authorization.k8s.io/v1
+ kind: ClusterRoleBinding
+ metadata:
+   name: prometheus-kubelet-binding
+ roleRef:
+   apiGroup: rbac.authorization.k8s.io
+   kind: ClusterRole
+   name: prometheus-kubelet
+ subjects:
+   - kind: ServiceAccount
+     name: prometheus-remote
+     namespace: kube-system
