@@ -2,23 +2,25 @@
  1. Metrics Server
 
     kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
+    
 or
+
     kubectl apply -f components.yaml
     
- 2. Create a ServiceAccount with Permissions
+ 3. Create a ServiceAccount with Permissions
 
          kubectl apply -f prometheus-sa.yaml
 
- 3. prometheus Secret
+ 4. prometheus Secret
 
     kubectl apply -f prometheus-remote-token.yaml
 
-4.  Create token and token file
+5.  Create token and token file
 
     SECRET=$(kubectl -n kube-system get sa prometheus-remote -o jsonpath="{.secrets[0].name}")
  kubectl -n kube-system get secret $SECRET -o jsonpath="{.data.token}" | base64 -d > /etc/prometheus/kubelet.token
 
- 5. prometheus.yaml
+ 6. prometheus.yaml
 
     ```
 scrape_configs:
