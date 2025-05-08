@@ -1,0 +1,137 @@
+Here’s a complete command-line setup for a highly available multi-master Kubernetes cluster without an external load balancer, using HAProxy and Keepalived on each master node. This setup uses a Virtual IP (VIP) for redundancy, eliminating the single point of failure.
+
+🖥️ Node Setup Assumptions
+Node	IP	Role	Priority
+master1	192.168.1.10	Master	150
+master2	192.168.1.11	Master	100
+master3	192.168.1.12	Master	90
+VIP	192.168.1.100	Shared by Keepalived	
+
+⚙️ Prerequisites (on all master nodes)
+1. Update & install base tools
+
+sudo apt update && sudo apt install -y \
+  curl vim wget gnupg lsb-release apt-transport-https \
+  software-properties-common ca-certificates
+2. Install Docker or containerd (required by kubelet)
+Use containerd (preferred):
+
+sudo apt install -y containerd
+sudo mkdir -p /etc/containerd
+containerd config default | sudo tee /etc/containerd/config.toml
+sudo systemctl restart containerd
+📦 Step 1: Install HAProxy on All Masters
+
+sudo apt install -y haproxy
+Edit /etc/haproxy/haproxy.cfg:
+
+sudo tee /etc/haproxy/haproxy.cfg > /dev/null <<EOF
+global
+    log /dev/log local0
+    maxconn 2048
+
+defaults
+    log global
+    mode tcp
+    option tcplog
+    timeout connect 10s
+    timeout client 1m
+    timeout server 1m
+
+frontend kubernetes
+    bind *:6443
+    default_backend kube-masters
+
+backend kube-masters
+    balance roundrobin
+    option tcp-check
+    default-server inter 3s fall 3 rise 2
+    server master1 192.168.1.10:6443 check
+    server master2 192.168.1.11:6443 check
+    server master3 192.168.1.12:6443 check
+EOF
+
+sudo systemctl restart haproxy
+sudo systemctl enable haproxy
+🛡️ Step 2: Install Keepalived on All Masters
+
+sudo apt install -y keepalived
+Example for master1:
+
+sudo tee /etc/keepalived/keepalived.conf > /dev/null <<EOF
+vrrp_instance VI_1 {
+    state MASTER
+    interface eth0
+    virtual_router_id 51
+    priority 150
+    advert_int 1
+    authentication {
+        auth_type PASS
+        auth_pass 42kube
+    }
+    virtual_ipaddress {
+        192.168.1.100
+    }
+}
+EOF
+Change priority and state on master2/master3:
+master2: priority 100, state BACKUP
+
+master3: priority 90, state BACKUP
+
+Then:
+
+sudo systemctl restart keepalived
+sudo systemctl enable keepalived
+Check VIP:
+
+ip addr show | grep 192.168.1.100
+🚀 Step 3: Install Kubernetes Binaries on All Masters
+
+curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
+sudo tee /etc/apt/sources.list.d/kubernetes.list <<EOF
+deb https://apt.kubernetes.io/ kubernetes-xenial main
+EOF
+
+sudo apt update
+sudo apt install -y kubeadm kubelet kubectl
+sudo apt-mark hold kubelet kubeadm kubectl
+⚙️ Step 4: Initialize First Master (on master1)
+
+kubeadm init \
+  --control-plane-endpoint "192.168.1.100:6443" \
+  --upload-certs \
+  --pod-network-cidr=10.244.0.0/16
+Save the output — especially:
+
+kubeadm join ... --control-plane --certificate-key ...
+
+Set up kubectl:
+
+mkdir -p $HOME/.kube
+sudo cp /etc/kubernetes/admin.conf $HOME/.kube/config
+sudo chown $(id -u):$(id -g) $HOME/.kube/config
+Install Flannel (or Calico) network plugin:
+
+kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
+➕ Step 5: Join Other Masters
+Run the kubeadm join command from step 4 on master2 and master3, like:
+
+kubeadm join 192.168.1.100:6443 \
+  --token abcdef.0123456789abcdef \
+  --discovery-token-ca-cert-hash sha256:... \
+  --control-plane --certificate-key <KEY>
+👷 Step 6: Join Worker Nodes (optional)
+Run on each worker:
+
+kubeadm join 192.168.1.100:6443 \
+  --token abcdef.0123456789abcdef \
+  --discovery-token-ca-cert-hash sha256:...
+✅ Verify
+From master1:
+
+kubectl get nodes
+kubectl get pods -A
+Ensure all nodes are Ready, and the VIP (192.168.1.100) responds to:
+
+curl -k https://192.168.1.100:6443/healthz
