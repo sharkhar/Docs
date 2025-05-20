@@ -6,7 +6,7 @@ In this guide, we'll walk you through installing Docker on your system step-by-s
 
 ### Docker Installation
 **1. Add the Docker Repository**
-```
+```sh
 dnf config-manager --add-repo=https://download.docker.com/linux/centos/docker-ce.repo
 ```
  This command adds the Docker repository to your system, which allows you to install Docker from the official Docker repositories. This is required before you can install Docker packages using dnf.
