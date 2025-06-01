@@ -1,11 +1,12 @@
 1. Download Trivy Binary
-   url :
+   
+   URL :
    https://github.com/aquasecurity/trivy/releases/
    
-   ```
+  ```
    curl -LO https://github.com/aquasecurity/trivy/releases/download/v0.63.0/trivy_0.63.0_Linux-64bit.deb
    tar -xzf trivy_0.63.0_Linux-64bit.tar.gz
-   ```
+  ```
 2. Download Trivy Vulnerability Database (DB)
   ```
   # Create a cache directory
