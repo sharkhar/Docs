@@ -1,0 +1,14 @@
+---
+- name: copy files to remote
+  hosts: all
+
+  tasks:
+  - name: copy files
+    copy:
+      src: /root/kafka_2.13-3.2.0.tgz
+      dest: /tmp/
+      owner: root
+      group: shardul
+      mode: ugo=rwx
+      backup: true
+

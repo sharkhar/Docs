@@ -1,0 +1,17 @@
+---
+- name: files
+  hosts: all
+
+  tasks:
+  - name: create file
+    file: 
+      path: /tmp
+      state: touch # touch= create files, absent= delete file
+      owner: root
+      group: shardul
+      mode: u=rwx,g=rw,o=r
+
+  - name: create directory
+    file:
+      path: /tmp/
+      state: directory  # directory= create directory, absent= delete directory

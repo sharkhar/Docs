@@ -1,0 +1,13 @@
+---
+- name: Move a file on remote server
+  hosts: all
+  become: false
+  gather_facts: no
+
+  vars:
+    src_path: /root/file.txt
+    dest_path: /tmp/file.txt
+
+  tasks:
+    - name: Move file from source to destination
+      command: mv "{{ src_path }}" "{{ dest_path }}"

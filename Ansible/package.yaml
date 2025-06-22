@@ -1,0 +1,20 @@
+---
+- name: Service
+  hosts: all
+
+  tasks:
+  - name: Installation
+    yum: 
+      name: nginx
+      state: present
+
+  - name: Status
+    service: 
+      name: nginx
+      state: started
+      enabled: true
+
+  - name: Installation Haproxy
+    yum: 
+      name: haproxy
+      state: present
