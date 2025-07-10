@@ -8,6 +8,15 @@ Changes to Outputs:
   + print  = "hello, Shardul and age is 20"
 
 
+
+terraform plan -var age=30
+
+Changes to Outputs:
+
+  + print  = "hello, Shardul and age is 30"
+
+
+
 terraform plan
 
 var.age
