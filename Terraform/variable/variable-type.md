@@ -1,13 +1,15 @@
 
 terraform plan
+
 var.age
-  Enter a value: 20
+    Enter a value: 20
 
 Changes to Outputs:
   + print  = "hello, Shardul and age is 20"
 
 
 terraform plan
+
 var.age
   Enter a value: test
 
