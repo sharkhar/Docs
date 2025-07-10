@@ -1,20 +1,19 @@
-
+```
 terraform plan
 
 var.age
     Enter a value: 20
 
 Changes to Outputs:
-  + print  = "hello, Shardul and age is 20"
+      + print  = "hello, Shardul and age is 20"
+```
 
-
-
+```
 terraform plan -var age=30
 
 Changes to Outputs:
-
-  + print  = "hello, Shardul and age is 30"
-
+      + print  = "hello, Shardul and age is 30"
+```
 
 
 terraform plan
