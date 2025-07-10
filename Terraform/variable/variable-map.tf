@@ -16,13 +16,11 @@ output "print" {
 }
 
 
-```
-terraform plan 
 
-var.username
-  Enter a value: john
+# terraform plan 
 
+# var.username
+#   Enter a value: john
 
-Changes to Outputs:
-  + print  = "hello, john and age is 52"
-```
+# Changes to Outputs:
+#    + print  = "hello, john and age is 52"
