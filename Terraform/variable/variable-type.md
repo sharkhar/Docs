@@ -40,3 +40,9 @@ You can apply this plan to save these new output values to the Terraform state, 
 - bool: true or false
 - list: ["us-west-1a", "us-west-1c"]
 - map: {name = "Mabel", age = 52}
+
+
+variables from machine env variables 
+export TF_VAR_age=20
+
+
