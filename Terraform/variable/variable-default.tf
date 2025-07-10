@@ -9,16 +9,14 @@ output test {
 }
 
 
-```
-terraform plan
+# terraform plan
 
-Changes to Outputs:
-  + test   = "hello, India"
-```
+# Changes to Outputs:
+#   + test   = "hello, India"
 
-```
-terraform plan -var test=shardul
 
-Changes to Outputs:
-  + test   = "hello, shardul"
-```
+# terraform plan -var test=shardul
+
+# Changes to Outputs:
+#   + test   = "hello, shardul"
+
