@@ -33,6 +33,7 @@ You can apply this plan to save these new output values to the Terraform state, 
 │ Unsuitable value for var.age set using an interactive prompt: a number is required.
 ```
 
+----
 
 ## Types
 - string: "hello"
@@ -41,8 +42,10 @@ You can apply this plan to save these new output values to the Terraform state, 
 - list: ["us-west-1a", "us-west-1c"]
 - map: {name = "Mabel", age = 52}
 
+--- 
 
-variables from machine env variables 
+# variables from machine env variables 
+
 export TF_VAR_age=20
 
 
