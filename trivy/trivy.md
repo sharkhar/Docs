@@ -4,7 +4,7 @@
    https://github.com/aquasecurity/trivy/releases/
    
   ```
-   curl -LO https://github.com/aquasecurity/trivy/releases/download/v0.63.0/trivy_0.63.0_Linux-64bit.deb
+   curl -LO https://github.com/aquasecurity/trivy/releases/download/v0.63.0/trivy_0.63.0_Linux-64bit.tar.gz
    tar -xzf trivy_0.63.0_Linux-64bit.tar.gz
   ```
 2. Download Trivy Vulnerability Database (DB)
@@ -52,3 +52,6 @@ or
   ```
   ./trivy --cache-dir ./trivy-cache --skip-db-update image alpine:latest
   ```
+
+2. Scan VM Images / Root Filesystems
+trivy rootfs  /
